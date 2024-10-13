@@ -7,10 +7,9 @@ def identification(saisie):
     nombre = 0
     work_list = list(ROMAN_DIGITS.keys())
     #pour clé dans work_list
-        # tant que clé présent dans saisie
+        # tant que saisie commence par clé
             # ajouter valeur de clé  à nombre
             # effacer clé de saisie
-        # effacer clé de work_liste
     # retourner nombre
     pass
 
