@@ -94,6 +94,6 @@ def add_romans(additio_romana) ->str:
     return transcription(result)
 
 
-print("ADDITIO ROMANA \n Saisissez des nombres romains séparés par un +")
+print("ADDITIO ROMANA\nSaisissez des nombres romains séparés par un +")
 guess = input("saisie utilisateur : ")
 print(add_romans(guess))
