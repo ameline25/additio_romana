@@ -35,7 +35,8 @@ def transcription(nombre) ->str:
 
 
 def verification_syntaxique(saisie)-> bool:
-    """ Retourne True si le nombre est correct"""
+    """ Retourne True si le nombre est correct
+                 False et affiche le motif de rejet si le nombre est incorrect """
     for digit in saisie:
         # chiffres romains ?
         if digit not in ROMAN_DIGITS:
