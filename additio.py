@@ -43,11 +43,9 @@ def verification_syntaxique(saisie)-> bool:
             print(f"ERRARE {saisie}: caractère romain {digit} invalide.")
             return False
         # quantité des chiffres romains ?
-        if digit in ["M", "C", "X", "I"] and saisie.count(digit) > 3:                                     
-            # plus de 3 de suite?
-            if digit * 4 in saisie:
-                print(f"ERRARE {saisie}: nombre de {digit} invalide.")
-                return False
+        if digit in ["M", "C", "X", "I"] and  digit * 4 in saisie:
+            print(f"ERRARE {saisie}: nombre de {digit} invalide.")
+            return False
         elif digit in ["D", "L", "V"] and saisie.count(digit)  > 1:
             print(f"ERRARE {saisie}: nombre de {digit} invalide.")
           return False
