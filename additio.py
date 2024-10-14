@@ -35,7 +35,6 @@ def transcription(nombre) ->str:
 
 
 def verification_syntaxique(saisie)-> bool:
-    syntax_error = ["IM", "XM", "IC"]
     """ Retourne True si le nombre est correct"""
     for digit in saisie:
         # chiffres romains ?
@@ -47,7 +46,8 @@ def verification_syntaxique(saisie)-> bool:
             print(f"ERRARE {saisie}: nombre de {digit} invalide.")
             return False
         elif digit in ["D", "L", "V"] and saisie.count(digit)  > 1:
-            return False
+            print(f"ERRARE {saisie}: nombre de {digit} invalide.")
+          return False
 
     # ordre des chiffres romains
     test_saisie = saisie
