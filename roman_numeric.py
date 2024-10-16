@@ -7,7 +7,7 @@ ROMAN_DIGITS = {"M": 1000,
                 "I": 1}
 
 def verification_syntaxique(saisie: str)-> bool:
-     """ Retourne True si le nombre est correct"""
+    """ Retourne True si le nombre est correct"""
     for digit in saisie:
         # chiffres romains ?
         if digit not in ROMAN_DIGITS:
