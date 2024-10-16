@@ -33,8 +33,8 @@ def verification_syntaxique(saisie: str)-> bool:
                 temp_list = temp_list + ["CM", "D", "CD"]
             elif key in ["XC", "L", "XL"]:
                 temp_list = temp_list + ["XC", "L", "XL"]
-            elif key in ["IX", "VI", "VI"]:
-                temp_list = temp_list + ["IX", "VI", "IV"]
+            elif key in ["IX", "V", "VI"]:
+                temp_list = temp_list + ["IX", "V", "IV"]
             else
                 temp_list.append(key) # mémorise les clés déja vérifiées
     if test_saisie != "": # toutes les clés ont été vérifiées et il reste des chiffres romains
