@@ -1,11 +1,13 @@
 ROMAN_DIGITS = {"M": 1000,
-                "CM": 900, "D": 500, "CD": 400, "C": 100,
-                "XC": 90, 'L': 50, "XL": 40, "X" : 10,
-                "IX": 9, "V" : 5, "IV": 4, "I": 1}
+                "CM": 900, "D": 500, "CD": 400,
+                "C": 100,
+                "XC": 90, 'L': 50, "XL": 40,
+                "X" : 10,
+                "IX": 9, "V" : 5, "IV": 4,
+                "I": 1}
 
 def verification_syntaxique(saisie: str)-> bool:
-    syntax_error = ["IM", "XM", "IC"]
-    """ Retourne True si le nombre est correct"""
+     """ Retourne True si le nombre est correct"""
     for digit in saisie:
         # chiffres romains ?
         if digit not in ROMAN_DIGITS:
@@ -27,7 +29,14 @@ def verification_syntaxique(saisie: str)-> bool:
                 print(f"ERRARE {saisie}: {key} déja utilisé.")
                 return False
         else:
-            temp_list.append(key) # mémorise les clés déja vérifiées
+            if key in ["CM", "D", "CD"]:
+                temp_list = temp_list + ["CM", "D", "CD"]
+            elif key in ["XC", "L", "XL"]:
+                temp_list = temp_list + ["XC", "L", "XL"]
+            elif key in ["IX", "VI", "VI"]:
+                temp_list = temp_list + ["IX", "VI", "IV"]
+            else
+                temp_list.append(key) # mémorise les clés déja vérifiées
     if test_saisie != "": # toutes les clés ont été vérifiées et il reste des chiffres romains
         print(f"ERRARE {saisie}: enchainement {saisie.replace(test_saisie,"")}-{test_saisie} invalide")
         return False
