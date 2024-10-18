@@ -6,7 +6,7 @@ ROMAN_DIGITS = {"M": 1000,
                 "IX": 9, "V" : 5, "IV": 4,
                 "I": 1}
 
-def verification_syntaxique(saisie: str)-> bool:
+def correct_syntax(saisie: str)-> bool:
     """ Retourne True si le nombre est correct"""
     work_list = list(ROMAN_DIGITS.keys())
     test_saisie = saisie    
@@ -47,7 +47,7 @@ def arabic_convert(saisie: str) -> int:
     """ Retourne le nombre arabe correspondant à la saisie romaine
                  ou indique saisie invalide """
     nombre = 0  # initialisation
-    if verification_syntaxique(saisie):
+    if correct_syntax(saisie):
         # Pour clé dans le dictionnaire
         for key, valeur in ROMAN_DIGITS.items():
             # si clé correspond au début de saisie
@@ -85,7 +85,7 @@ def add_romans(additio_romana: str) ->str:
 
     # affiche les nombres rejetés et le motif de rejet
     for number in roman_list:
-        if verification_syntaxique(number):
+        if correct_syntax(number):
             decimal_list.append(arabic_convert(number))
         else:
             return "COMPUTATIO IMPOSSIBILIS"
