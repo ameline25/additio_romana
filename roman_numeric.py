@@ -94,8 +94,7 @@ def add_romans(additio_romana: str) ->str:
     for number in decimal_list:
         result += int(number)
     if result > 3999:
-        print(f"{" " * 13 + "_" * 2}\nNUMERI SUPRA IV NON ACCEPTI")
-        exit()
+        return f"{" " * 13 + "_" * 2}\nNUMERI SUPRA IV NON ACCEPTI"
 
     # convertir et retourner le résultat
     return roman_convert(result)
