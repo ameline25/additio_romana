@@ -8,44 +8,43 @@ ROMAN_DIGITS = {"M": 1000,
 
 def verification_syntaxique(saisie: str)-> bool:
     """ Retourne True si le nombre est correct"""
+    # séquences interdites
+    forbidden_sequence = ["IVI", "IXI", "CDC", "CMC", "CXC", "XVX"]
+    for sequence in forbidden_sequence:
+        if sequence in saisie:
+            return False
+
     for digit in saisie:
         # chiffres romains ?
         if digit not in ROMAN_DIGITS:
-            print(f"ERRARE {saisie}: caractère romain {digit} invalide.")
             return False
-        # quantité des chiffres romains ?
-        if digit in ["M", "C", "X", "I"] and  digit * 4 in saisie:
-            print(f"ERRARE {saisie}: nombre de {digit} invalide.")
+
+        # suite de chiffres romains identiques
+        if digit in ["M", "C", "X", "I"] and  digit * 4 in saisie:  # chiffres répétables
+            return False
+
+    work_list = list(ROMAN_DIGITS.keys())
+    test_saisie = saisie
+    # chiffres non répétables
+    for key in work_list:
+        if key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] and saisie.count(key) > 1:  # chiffres uniques
             return False
 
     # ordre des chiffres romains
-    test_saisie = saisie
-    work_list =  list(ROMAN_DIGITS.keys())
-    temp_list = []  # liste temporaire stockant les chiffres testés
+    """ les chiffres romains les plus à gauche sont éliminés un à un dans l'ordre défini par le dictionnaire"""
     for key in work_list:
-        if test_saisie[0:len(key)] == key:
-            test_saisie = test_saisie.strip(key)
-            if key in temp_list and test_saisie != "":  # utilisation d'une clé déja vérifiée
-                print(f"ERRARE {saisie}: {key} déja utilisé.")
-                return False
-        else:
-            if key in ["CM", "D", "CD"]:
-                temp_list = temp_list + ["CM", "D", "CD"]
-            elif key in ["XC", "L", "XL"]:
-                temp_list = temp_list + ["XC", "L", "XL"]
-            elif key in ["IX", "V", "VI"]:
-                temp_list = temp_list + ["IX", "V", "IV"]
-            else
-                temp_list.append(key) # mémorise les clés déja vérifiées
-    if test_saisie != "": # toutes les clés ont été vérifiées et il reste des chiffres romains
-        print(f"ERRARE {saisie}: enchainement {saisie.replace(test_saisie,"")}-{test_saisie} invalide")
+        while test_saisie[0:len(key)] == key:  # tant qu'il en reste
+            test_saisie = test_saisie[len(key):]
+
+    if test_saisie !="":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
         return False
+
     return True
 
 
 def arabic_convert(saisie: str) -> int:
     """ Retourne le nombre arabe correspondant à la saisie romaine
-                 ou 0 et le motif en cas de nombre invalide"""
+                 ou indique saisie invalide """
     nombre = 0  # initialisation
     if verification_syntaxique(saisie):
         # Pour clé dans le dictionnaire
@@ -57,9 +56,8 @@ def arabic_convert(saisie: str) -> int:
                     nombre += valeur
                     # effacer clé de saisie
                     saisie = saisie[len(key):]
-            else:
-                pass
-    # retourner nombre
+    else:
+        nombre ="Roman syntax Error"
     return nombre
 
 
@@ -78,11 +76,10 @@ def roman_convert(nombre: int) -> str:
 
 
 def add_romans(additio_romana: str) ->str:
-    decimal_list = roman_list = []
+    decimal_list , roman_list = [], []
     guess_ =  additio_romana.replace(" ", "")   # purge les "espaces"
-    if '+' not in guess:
-        print("La saisie n'est pas une addition!")
-        exit()
+    if '+' not in guess_:
+        return "La saisie n'est pas une addition!"
     roman_list = guess_.split("+")  # liste les nombres à additionner
 
     # affiche les nombres rejetés et le motif de rejet
@@ -106,10 +103,11 @@ def add_romans(additio_romana: str) ->str:
 if __name__ == "__main__":
 
     # tests
-    print(f"conversion en chiffres arabes : {arabic_convert("MMDCMLIV")}")
+    while True:
+        # print("ADDITIO ROMANA \n Saisissez des nombres romains séparés par un +")
 
-    print(f"conversion en chiffres romains: {roman_convert(2954)} ")
-
-    print("ADDITIO ROMANA \n Saisissez des nombres romains séparés par un +")
-    guess = input("saisie utilisateur : ")
-    print(add_romans(guess))
+        guess = input("saisie utilisateur ou (Q) pour quitter: ")
+        if guess.upper() == "Q":
+            exit()
+        print(add_romans(guess))
+        continue
