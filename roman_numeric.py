@@ -8,33 +8,34 @@ ROMAN_DIGITS = {"M": 1000,
 
 def verification_syntaxique(saisie: str)-> bool:
     """ Retourne True si le nombre est correct"""
-    # séquences interdites
+    work_list = list(ROMAN_DIGITS.keys())
+    test_saisie = saisie    
+  
+    # séquences interdites?
     forbidden_sequence = ["IVI", "IXI", "CDC", "CMC", "CXC", "XVX"]
     for sequence in forbidden_sequence:
         if sequence in saisie:
             return False
-
+          
+    # chiffres romains?
     for digit in saisie:
-        # chiffres romains ?
         if digit not in ROMAN_DIGITS:
             return False
 
-        # suite de chiffres romains identiques
+        # suite de chiffres romains identiques?
         if digit in ["M", "C", "X", "I"] and  digit * 4 in saisie:  # chiffres répétables
             return False
 
-    work_list = list(ROMAN_DIGITS.keys())
-    test_saisie = saisie
-    # chiffres non répétables
+    # multiple présence de chiffres devant être uniques?
     for key in work_list:
-        if key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] and saisie.count(key) > 1:  # chiffres uniques
+        if key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] and saisie.count(key) > 1:
             return False
 
-    # ordre des chiffres romains
-    """ les chiffres romains les plus à gauche sont éliminés un à un dans l'ordre défini par le dictionnaire"""
+    # ordre correct des chiffres romains?
+    # les chiffres romains du début sont éliminés un à un dans l'ordre défini par le dictionnaire
     for key in work_list:
         while test_saisie[0:len(key)] == key:  # tant qu'il en reste
-            test_saisie = test_saisie[len(key):]
+            test_saisie = test_saisie[len(key):]  # on supprime
 
     if test_saisie !="":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
         return False
