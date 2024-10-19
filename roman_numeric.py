@@ -2,52 +2,59 @@ ROMAN_DIGITS = {"M": 1000,
                 "CM": 900, "D": 500, "CD": 400,
                 "C": 100,
                 "XC": 90, 'L': 50, "XL": 40,
-                "X" : 10,
-                "IX": 9, "V" : 5, "IV": 4,
+                "X": 10,
+                "IX": 9, "V": 5, "IV": 4,
                 "I": 1}
 
-def correct_syntax(saisie: str)-> bool:
-    """ Retourne True si le nombre est correct"""
+
+def correct_syntax(saisie: str) -> (bool, str):
+    """ Retourne True si le nombre est correct et un message concernant l'anomalie rencontrée"""
     work_list = list(ROMAN_DIGITS.keys())
-    test_saisie = saisie    
-  
-    # séquences interdites?
+    test_saisie = saisie
+
+    # séquences interdites ?
     forbidden_sequence = ["IVI", "IXI", "CDC", "CMC", "CXC", "XVX"]
     for sequence in forbidden_sequence:
         if sequence in saisie:
-            return False
-          
-    # chiffres romains?
+            message = f"séquence {sequence} interdite"
+            return False, message
+
+    # chiffres romains ?
     for digit in saisie:
         if digit not in ROMAN_DIGITS:
-            return False
+            message = f"{digit} n'est pas un chiffre romain!"
+            return False, message
 
-        # suite de chiffres romains identiques?
-        if digit in ["M", "C", "X", "I"] and  digit * 4 in saisie:  # chiffres répétables
-            return False
+        # suite de chiffres romains identiques ?
+        if digit in ["M", "C", "X", "I"] and digit * 4 in saisie:  # chiffres répétables
+            message = f"répétition {digit} erronée."
+            return False, message
 
-    # multiple présence de chiffres devant être uniques?
+    # multiple présence de chiffres devant être uniques ?
     for key in work_list:
         if key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] and saisie.count(key) > 1:
-            return False
+            message = f"répétition {key} erronée."
+            return False, message
 
-    # ordre correct des chiffres romains?
+    # ordre correct des chiffres romains ?
     # les chiffres romains du début sont éliminés un à un dans l'ordre défini par le dictionnaire
     for key in work_list:
         while test_saisie[0:len(key)] == key:  # tant qu'il en reste
             test_saisie = test_saisie[len(key):]  # on supprime
 
-    if test_saisie !="":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
-        return False
+    if test_saisie != "":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
+        message = f"enchainement {saisie.replace(test_saisie,"")} - {test_saisie} erroné"
+        return False, message
 
-    return True
+    return True, ""
 
 
 def arabic_convert(saisie: str) -> int:
     """ Retourne le nombre arabe correspondant à la saisie romaine
                  ou indique saisie invalide """
     nombre = 0  # initialisation
-    if correct_syntax(saisie):
+    correct, message = correct_syntax(saisie)
+    if correct:
         # Pour clé dans le dictionnaire
         for key, valeur in ROMAN_DIGITS.items():
             # si clé correspond au début de saisie
@@ -58,7 +65,7 @@ def arabic_convert(saisie: str) -> int:
                     # effacer clé de saisie
                     saisie = saisie[len(key):]
     else:
-        nombre ="Roman syntax Error"
+        nombre = "Roman syntax Error"
     return nombre
 
 
@@ -76,21 +83,27 @@ def roman_convert(nombre: int) -> str:
     return roman
 
 
-def add_romans(additio_romana: str) ->str:
-    decimal_list , roman_list = [], []
-    guess_ =  additio_romana.replace(" ", "")   # purge les "espaces"
+def add_romans(additio_romana: str) -> str:
+    decimal_list, roman_list = [], []
+    guess_ = additio_romana.replace(" ", "")  # purge les "espaces"
     if '+' not in guess_:
         return "La saisie n'est pas une addition!"
     roman_list = guess_.split("+")  # liste les nombres à additionner
 
     # affiche les nombres rejetés et le motif de rejet
+    error = False
     for number in roman_list:
-        if correct_syntax(number):
+        correct, message = correct_syntax(number)
+        if correct:
             decimal_list.append(arabic_convert(number))
         else:
-            return "COMPUTATIO IMPOSSIBILIS"
+            print(f"{number} : {message}")
+            error = True
 
-        # additionner les éléments de la liste decimal_list
+    if error:
+        return "COMPUTATIO IMPOSSIBILILIS"
+
+    # additionner les éléments de la liste decimal_list
     result = 0
     for number in decimal_list:
         result += int(number)
@@ -99,6 +112,7 @@ def add_romans(additio_romana: str) ->str:
 
     # convertir et retourner le résultat
     return roman_convert(result)
+
 
 if __name__ == "__main__":
 
