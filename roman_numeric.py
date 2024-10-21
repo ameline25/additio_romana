@@ -7,7 +7,7 @@ ROMAN_DIGITS = {"M": 1000,
                 "I": 1}
 
 
-def correct_syntax(saisie: str) -> (bool, str):
+def is_roman(saisie: str) -> (bool, str):
     """ Retourne True si le nombre est correct et un message concernant l'anomalie rencontrée"""
     work_list = list(ROMAN_DIGITS.keys())
     test_saisie = saisie
@@ -53,7 +53,7 @@ def arabic_convert(saisie: str) -> int:
     """ Retourne le nombre arabe correspondant à la saisie romaine
                  ou indique saisie invalide """
     nombre = 0  # initialisation
-    correct, message = correct_syntax(saisie)
+    correct, message = is_roman(saisie)
     if correct:
         # Pour clé dans le dictionnaire
         for key, valeur in ROMAN_DIGITS.items():
@@ -84,16 +84,15 @@ def roman_convert(nombre: int) -> str:
 
 
 def add_romans(additio_romana: str) -> str:
-    decimal_list, roman_list = [], []
-    guess_ = additio_romana.replace(" ", "")  # purge les "espaces"
-    if '+' not in guess_:
+    if '+' not in additio_romana:
         return "La saisie n'est pas une addition!"
-    roman_list = guess_.split("+")  # liste les nombres à additionner
+    roman_list = "".join(additio_romana.split()).split("+")  # liste les nombres à additionner
 
     # affiche les nombres rejetés et le motif de rejet
     error = False
+    decimal_list = []
     for number in roman_list:
-        correct, message = correct_syntax(number)
+        correct, message = is_roman(number)
         if correct:
             decimal_list.append(arabic_convert(number))
         else:
@@ -104,14 +103,9 @@ def add_romans(additio_romana: str) -> str:
         return "COMPUTATIO IMPOSSIBILILIS"
 
     # additionner les éléments de la liste decimal_list
-    result = 0
-    for number in decimal_list:
-        result += int(number)
-    if result > 3999:
-        return f"{" " * 13 + "_" * 2}\nNUMERI SUPRA IV NON ACCEPTI"
-
-    # convertir et retourner le résultat
-    return roman_convert(result)
+    result = sum(decimal_list)
+    return f"             __\nNUMERI SUPRA IV NON ACCEPTI" if result > 3999 else roman_convert(result)
+    
 
 
 if __name__ == "__main__":
@@ -124,4 +118,3 @@ if __name__ == "__main__":
         if guess.upper() == "Q":
             exit()
         print(add_romans(guess))
-        continue
