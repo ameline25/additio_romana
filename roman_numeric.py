@@ -11,13 +11,15 @@ class Roman:
         self.label = label
         self.validity = self.is_roman()
         self.anomaly = self.get_anomaly()
+        self.value = self.get_roman_value()
 
-    def validate(self) -> (bool, str):
+    def validate_roman(self) -> (bool, str):
         """ Retourne True si le nombre est correct et un message concernant l'anomalie rencontrée"""
         work_list = list(ROMAN_DIGITS.keys())
         test_saisie = self.label
 
         # séquences interdites ?
+
         forbidden_sequence = ["IVI", "IXI", "CDC", "CMC", "CXC", "XVX"]
         for sequence in forbidden_sequence:
             if sequence in self.label:
@@ -53,18 +55,18 @@ class Roman:
 
         return True, ""
 
-
     def is_roman(self):
-        valid, _ = self.validate()
+        valid, _ = self.validate_roman()
         return valid
 
     def get_anomaly(self):
-        _, message = self.validate()
+        _, message = self.validate_roman()
         return message
 
+
     def get_roman_value(self) -> int:
-        """ Retourne le nombre arabe correspondant à la saisie romaine
-                     ou indique saisie invalide """
+        """ Retourne la valeur entière correspondante à la saisie romaine
+                         ou indique saisie invalide """
         nombre = 0  # initialisation
         saisie = self.label
         if self.validity:
@@ -92,23 +94,22 @@ def roman_convert(nombre: int) -> str:
         roman = roman + symbol * n
         # soustraire de nombre
         nombre -= n * valeur
-    # retourner roman
+        # retourner roman
     return roman
 
-
-def add_romans(additio_romana: str) -> str:
-    if '+' not in additio_romana:
+def add_romans(saisie: str) -> str:
+    if '+' not in saisie:
         return "La saisie n'est pas une addition!"
-    roman_list = "".join(additio_romana.split()).split("+")  # liste les nombres à additionner
+    roman_list = "".join(saisie.split()).split("+")  # liste les nombres à additionner
 
     # affiche les nombres rejetés et le motif de rejet
     error = False
     decimal_list = []
     for number in roman_list:
-        if Roman(number).correct:
-            decimal_list.append(get_roman_value(number))
+        if Roman(number).validity:
+            decimal_list.append(Roman(number).value)
         else:
-            print(f"{number} : {message}")
+            print(f"{number} : {Roman(number).anomaly}")
             error = True
 
     if error:
