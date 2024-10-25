@@ -81,24 +81,16 @@ def roman_convert(nombre: int) -> str:
 def add_romans(saisie: str) -> str:
     if '+' not in saisie:
         return "La saisie n'est pas une addition!"
-    roman_list = "".join(saisie.split()).split("+")  # liste les nombres à additionner
 
-    # affiche les nombres rejetés et le motif de rejet
-    error = False
-    decimal_list = []
-    for number in roman_list:
+    add_result = 0  # initialisation de la somme
+    # parcourir les caractères de saisie et mettre à jour add_result ou afficher un message explicatif
+    for number in "".join(saisie.split()).split("+"):
         if Roman(number).validity:
-            decimal_list.append(Roman(number).value)
+            add_result = Roman(number).value
         else:
-            print(f"{number} : {Roman(number).anomaly}")
-            error = True
+            return f"COMPUTATIO IMPOSSIBILILIS : {number} ({Roman(number).anomaly})"
 
-    if error:
-        return "COMPUTATIO IMPOSSIBILILIS"
-
-    # additionner les éléments de la liste decimal_list
-    result = sum(decimal_list)
-    return f"             __\nNUMERI SUPRA IV NON ACCEPTI" if result > 3999 else roman_convert(result)
+    return f"             __\nNUMERI SUPRA IV NON ACCEPTI" if add_result > 3999 else roman_convert(add_result)
 
 
 if __name__ == "__main__":
