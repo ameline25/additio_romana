@@ -65,22 +65,16 @@ class Roman:
 
 
     def get_roman_value(self) -> int:
-        """ Retourne la valeur entière correspondante à la saisie romaine
-                         ou indique saisie invalide """
+        """ Retourne la valeur entière correspondante à la saisie romaine"""
         nombre = 0  # initialisation
         saisie = self.label
-        if self.validity:
-            # Pour clé dans le dictionnaire
-            for key, valeur in ROMAN_DIGITS.items():
-                # si clé correspond au début de saisie
-                if saisie[0:len(key)] == key:
-                    # tant que même clé
-                    while saisie[0:len(key)] == key:
-                        nombre += valeur
-                        # effacer clé de saisie
-                        saisie = saisie[len(key):]
-        else:
-            nombre = "Roman syntax Error"
+        # Pour clé dans le dictionnaire
+        for key, valeur in ROMAN_DIGITS.items():
+            # si clé correspond au début de saisie
+            while saisie[0:len(key)] == key:
+                nombre += valeur
+                # effacer clé de saisie
+                saisie = saisie[len(key):]
         return nombre
 
 
