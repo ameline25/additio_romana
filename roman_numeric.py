@@ -86,7 +86,7 @@ def add_romans(saisie: str) -> str:
     # parcourir les caractères de saisie et mettre à jour add_result ou afficher un message explicatif
     for number in "".join(saisie.split()).split("+"):
         if Roman(number).validity:
-            add_result = Roman(number).value
+            add_result += Roman(number).value
         else:
             return f"COMPUTATIO IMPOSSIBILILIS : {number} ({Roman(number).anomaly})"
 
