@@ -37,7 +37,7 @@ class Roman:
             while test_saisie[0:len(key)] == key:  # tant qu'il en reste
                 test_saisie = test_saisie[len(key):]  # on supprime
         if test_saisie != "":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
-            message = f"enchainement {self.label.replace(test_saisie,"")} - {test_saisie} erroné"
+            error_message = f"enchainement {self.label.replace(test_saisie,"")} - {test_saisie} erroné"
             return False, error_message
 
         return True, ""
