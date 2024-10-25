@@ -18,40 +18,27 @@ class Roman:
         work_list = list(ROMAN_DIGITS.keys())
         test_saisie = self.label
 
-        # séquences interdites ?
+        # Determination des séquences interdites
+        roman_symbols = ["I", "V", "X", "L", "C", "M"]
+        forbidden_sequences = [f"{s1}{s2}{s1}" for s1 in roman_symbols for s2 in roman_symbols if s1 != s2]
+        for exception in ["MCM", "CXC", "XIX"]:
+            forbidden_sequences.remove(exception)
 
-        forbidden_sequence = ["IVI", "IXI", "CDC", "CMC", "CXC", "XVX"]
-        for sequence in forbidden_sequence:
-            if sequence in self.label:
-                message = f"séquence {sequence} interdite"
-                return False, message
+        error_message = (
+            next((f"sequence '{seq}' interdite" for seq in forbidden_sequences if seq in self.label), None),
+            next((f"{digit} n'est pas un chiffre romain" for digit in self.label if digit not in roman_symbols), None),
+            next((f"répétition {digit} erronée." for digit in self.label if digit in ["M", "C", "X", "I"] and digit * 4\
+                  in self.label), None),
+            next((f"répétition {key} erronée." for key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] if
+                  self.label.count(key) > 1), None)
+                        )
 
-        # chiffres romains ?
-        for digit in self.label:
-            if digit not in ROMAN_DIGITS:
-                message = f"{digit} n'est pas un chiffre romain!"
-                return False, message
-
-            # suite de chiffres romains identiques ?
-            if digit in ["M", "C", "X", "I"] and digit * 4 in self.label:  # chiffres répétables
-                message = f"répétition {digit} erronée."
-                return False, message
-
-        # multiple présence de chiffres devant être uniques ?
-        for key in work_list:
-            if key in ["CM", "D", "CD", "XC", "L", "XL", "IX", "V", "IV"] and self.label.count(key) > 1:
-                message = f"répétition {key} erronée."
-                return False, message
-
-        # ordre correct des chiffres romains ?
-        # les chiffres romains du début sont éliminés un à un dans l'ordre défini par le dictionnaire
         for key in work_list:
             while test_saisie[0:len(key)] == key:  # tant qu'il en reste
                 test_saisie = test_saisie[len(key):]  # on supprime
-
         if test_saisie != "":  # une fois le dictionnaire épuisé, test_saisie devrait être vide !
             message = f"enchainement {self.label.replace(test_saisie,"")} - {test_saisie} erroné"
-            return False, message
+            return False, error_message
 
         return True, ""
 
