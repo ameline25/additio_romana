@@ -47,7 +47,7 @@ class Roman:
             error_message.add(f"enchainement {self.label.replace(test_saisie,"")} - {test_saisie} erroné")
 
         if error_message:  # en cas d'anomalie détectée
-            return False, f"{self.label}: {", ".join(error_message)}" 
+            return False, f"{self.label}: {", ".join(error_message)}"
 
         return True, ""
 
@@ -71,10 +71,9 @@ class Roman:
                 nombre += valeur
                 # effacer clé de saisie
                 saisie = saisie[len(key):]
-        return nombre
+        return nombre if  self.validity else "Syntaxe romaine erronée"
 
-
-@staticmethod
+    @staticmethod
     def roman_convert(nombre: int) -> str:
         """ Retourne la transcription romaine du nombre"""
         roman = ""  # initialisation
