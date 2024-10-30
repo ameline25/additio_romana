@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # tests
     while True:
         print("\nADDITIO ROMANA \n Saisissez des nombres romains séparés par un +")
-        guess = input("saisie utilisateur ou (Q) pour quitter: ")
+        guess = input("Saisie utilisateur ou (Q) pour quitter: ")
         if guess.upper() == "Q":
             exit()
         print(Roman.add_romans(guess))
