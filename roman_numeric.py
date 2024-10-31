@@ -20,47 +20,44 @@ class Roman:
             if digit not in ROMAN_SYMBOLS or (digit in ["M", "C", "X", "I"] and digit * 4 in self.label)\
                     or (digit in ["D", "L", "V"] and self.label.count(digit) > 1):
                 return False
+
         # Détermination des séquences interdites
         forbidden_sequences = [f"{s1}{s2}{s1}" for s1 in ROMAN_SYMBOLS for s2 in ROMAN_SYMBOLS if s1 != s2]
         for exception in ["MCM", "CXC", "XIX"]:
-            forbidden_sequences.remove(exception)
+            forbidden_sequences.remove(exception)  # réintégration des exceptions
         for seq in forbidden_sequences:
             if seq in self.label:
                 return False
-        # Exactitude de l'ordre des séquences
+
+        # conformité de l'ordre des séquences
         test_saisie = self.label
-        for key in list(ROMAN_DIGITS.keys()):
-            while test_saisie[0:len(key)] == key:  # tant qu'il en reste
-                test_saisie = test_saisie[len(key):]  # on supprime
-        if test_saisie != "":  # on doit finalement obtenir une chaine vide
+        for key in list(ROMAN_DIGITS.keys()):  # supprime key tant qu'il est présent au début...
+            while test_saisie[0:len(key)] == key:
+                test_saisie = test_saisie[len(key):]
+        if test_saisie != "":  # ... pour obtenir une chaine vide
             return False
         return True
 
     def get_roman_value(self) -> int:
         """ Retourne la valeur entière correspondante à la saisie romaine"""
-        nombre = 0  # initialisation
-        saisie = self.label
-        # Pour clé dans le dictionnaire
+        nombre, temp_saisie = 0, self.label  # initialisation
+
         for key, valeur in ROMAN_DIGITS.items():
-            # si clé correspond au début de saisie
-            while saisie[0:len(key)] == key:
+            while temp_saisie[0:len(key)] == key:
+                #  augmente nombre de la valeur de key tant qu'il est présent
                 nombre += valeur
-                # effacer clé de saisie
-                saisie = saisie[len(key):]
+                temp_saisie = temp_saisie[len(key):]
         return nombre
 
     @staticmethod
     def roman_convert(nombre: int) -> str:
         """ Retourne la transcription romaine du nombre"""
         roman = ""  # initialisation
-        # pour valeur dans le dictionnaire
+
         for symbol, valeur in ROMAN_DIGITS.items():
             n = nombre // valeur
-            # concaténer roman
             roman = roman + symbol * n
-            # soustraire de nombre
             nombre -= n * valeur
-            # retourner roman
         return roman
 
     @staticmethod
@@ -69,7 +66,7 @@ class Roman:
             return "La saisie n'est pas une addition!"
 
         add_result = 0  # initialisation de la somme
-        # parcourir les caractères de saisie et mettre à jour add_result ou afficher un message explicatif
+        # parcourir les caractères de saisie et mettre à jour add_result ou afficher un message d'erreur explicatif
         for number in "".join(saisie.split()).split("+"):
             if Roman(number).validity:
                 add_result += Roman(number).value
@@ -78,6 +75,7 @@ class Roman:
 
         return f"             __\nNUMERI SUPRA IV NON ACCEPTI" if add_result > 3999\
             else Roman(saisie).roman_convert(add_result)
+
 
 if __name__ == "__main__":
 
@@ -88,4 +86,3 @@ if __name__ == "__main__":
         if guess.upper() == "Q":
             exit()
         print(Roman.add_romans(guess))
-
